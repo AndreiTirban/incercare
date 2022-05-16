@@ -1,0 +1,39 @@
+@import "src/styles/styles"
+@import "src/styles/variables"
+
+.login
+  width: 70vw
+
+  &__right-content, &__left-content
+    @include center-items-column
+    flex: 1
+
+.left-content
+  &__title-stroked
+    -webkit-text-stroke: 2px $primary-color-text
+    color: $primary-color
+    font-size: 3rem
+
+  &__title
+    font-size: 2em
+    margin-top: 1vh
+    color: $accent-text
+
+.right-content
+  &__text
+    font-size: 1rem
+    margin: 0 0 1rem
+
+  &__image
+    width: 60%
+
+@media (min-width: 768px)
+  .right-content
+    &__image
+      width: 100%
+
+@media (min-width: 992px)
+  \:host
+    display: flex
+    margin-top: 5vh
+    justify-content: center

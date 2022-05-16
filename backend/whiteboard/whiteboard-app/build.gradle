@@ -1,0 +1,29 @@
+plugins {
+	id 'java'
+}
+
+group = 'ro.fortech.whiteboard'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    implementation group: 'org.keycloak', name: 'keycloak-spring-boot-starter', version: '15.0.2'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.20'
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.4'
+    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.3'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.junit.jupiter:junit-jupiter:5.7.0'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation project(':whiteboard-api')
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compileOnly 'org.keycloak.bom:keycloak-adapter-bom:15.0.2'
+}
+test {
+	useJUnitPlatform()
+}

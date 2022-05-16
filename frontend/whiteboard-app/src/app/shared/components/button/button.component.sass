@@ -1,0 +1,40 @@
+@import "src/styles/_variables.sass"
+
+.btn
+  color: white
+  border-radius: 5px
+  background-color: $accent
+  border: 1px solid $accent
+  display: flex
+  cursor: pointer
+  padding: 0
+  width: 100%
+
+  &:hover
+    color: $accent
+    background-color: $primary-color
+
+  &__text, &__icon
+    padding: 0.5em
+
+  &__text
+    white-space: nowrap
+    width: 70%
+
+  &__icon
+    background: rgba(0, 0, 0, 0.08)
+    display: none
+    width: 30%
+    justify-content: center
+
+    &--visible
+      display: inline-flex
+
+.btn-sm
+  font-size: 1rem
+
+.btn-md
+  font-size: 1.3rem
+
+.btn-lg
+  font-size: 1.6rem

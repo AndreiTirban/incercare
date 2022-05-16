@@ -1,0 +1,41 @@
+import io.spring.gradle.dependencymanagement.DependencyManagementPlugin
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+buildscript {
+    apply from: file("${rootProject.projectDir}/repos.gradle"), to: buildscript
+
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.5.1"
+        classpath 'io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE'
+    }
+}
+
+apply plugin: SpringBootPlugin
+apply plugin: DependencyManagementPlugin
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.5.12'
+    implementation group: 'org.keycloak', name: 'keycloak-admin-client', version: '15.0.2'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.4.3'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.0'
+    testImplementation group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.7.0'
+}
+
+springBoot {
+    buildInfo()
+}
+
+test {
+    useJUnitPlatform()
+}

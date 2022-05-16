@@ -1,0 +1,27 @@
+buildscript {
+    apply from: 'repos.gradle', to: buildscript
+    apply from: file("${rootProject.projectDir}/repos.gradle"), to: buildscript
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.5.1"
+        classpath 'io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE'
+    }
+}
+
+group = 'ro.fortech'
+version = '0.0.1-SNAPSHOT'
+
+allprojects {
+    apply plugin: 'idea'
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+
+    apply from: file("${rootProject.projectDir}/repos.gradle")
+    apply from: file("${rootProject.projectDir}/jacoco.gradle")
+}
+
+subprojects {
+    apply from: file("${rootProject.projectDir}/springboot.gradle")
+}
+
+apply from: file("${rootProject.projectDir}/sonarqube.gradle")
+apply from: file("${rootProject.projectDir}/multi-module.gradle")

@@ -1,0 +1,37 @@
+@import "src/styles/_variables.sass"
+
+.form-field
+  margin-top: .5rem
+  display: flex
+  flex-flow: row wrap
+  align-items: center
+
+  &:focus-within, &:hover
+    color: $accent
+
+    .form-field__form-control
+      border: 1.5px solid $accent
+
+  &__icon
+    position: absolute
+    margin: 1.5rem 0 0 .7rem
+
+  label
+    margin-bottom: .5rem
+    cursor: pointer
+
+  &__form-control
+    width: 100%
+    background-color: $primary-color
+    color: $primary-color-text
+    border: 1.5px solid gray
+    margin-bottom: .5vh
+    border-radius: 5px
+    padding: .7rem 2rem
+
+    &:focus
+      outline: none
+
+  &__invalid-feedback
+    color: $error
+    font-size: .9rem

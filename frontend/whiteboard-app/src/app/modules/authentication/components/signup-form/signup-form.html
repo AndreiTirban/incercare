@@ -1,0 +1,58 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form" class="signup-form">
+
+  <div class="form-group signup-form__field">
+    <app-form-field
+      [control]="getFormControls.fullName"
+      [formGroupParent]="form"
+      [iconName]="'user'"
+      [innerFormControlName]="'fullName'"
+      [label]="'Name'"
+      [submitted]="submitted"
+      [type]="'text'"
+    >
+    </app-form-field>
+  </div>
+
+  <div class="form-group signup-form__field">
+    <app-form-field
+      [control]="getFormControls.email"
+      [formGroupParent]="form"
+      [iconName]="'envelope'"
+      [innerFormControlName]="'email'"
+      [label]="'Email'"
+      [submitted]="submitted"
+      [type]="'text'"
+    >
+    </app-form-field>
+  </div>
+
+  <div class="form-group signup-form__field">
+    <app-form-field
+      [control]="getFormControls.password"
+      [formGroupParent]="form"
+      [iconName]="'lock'"
+      [innerFormControlName]="'password'"
+      [label]="'Password'"
+      [submitted]="submitted"
+      [type]="'password'"
+    >
+    </app-form-field>
+  </div>
+
+  <div class="form-group signup-form__field">
+    <app-form-field
+      [control]="getFormControls.confirmPassword"
+      [formGroupParent]="form"
+      [iconName]="'lock'"
+      [innerFormControlName]="'confirmPassword'"
+      [label]="'Confirm password'"
+      [submitted]="submitted"
+      [type]="'password'"
+    >
+    </app-form-field>
+  </div>
+
+  <div class="form-group">
+    <app-button [buttonSize]="'btn-md'" [buttonType]="'submit'" [text]="'Create account'" class="btn"></app-button>
+  </div>
+</form>

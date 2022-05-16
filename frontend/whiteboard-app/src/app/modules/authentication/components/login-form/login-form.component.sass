@@ -1,0 +1,25 @@
+@import "src/styles/styles.sass"
+
+\:host
+  width: 100%
+
+.login-form
+  align-items: center
+  display: flex
+  flex-direction: column
+
+  &__field
+    width: 80%
+
+  &__field:nth-child(4)
+    margin-bottom: 2rem
+
+  &__link
+    display: inline-block
+    padding: .55rem
+    text-decoration: none
+    font-size: 1.2rem
+    color: $accent-text
+
+.form-group:nth-child(3)
+  width: 40%

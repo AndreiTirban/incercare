@@ -1,0 +1,76 @@
+spring:
+  datasource:
+    hikari:
+      connection-timeout: 30000
+      idle-timeout: 10000
+      minimum-idle: 1
+      maximum-pool-size: 5
+      auto-commit: false
+      max-lifetime: 1800000
+    driver-class-name: "org.postgresql.Driver"
+    url: "jdbc:postgresql://localhost:5432/whiteboard_dev?currentSchema=whiteboard"
+    username: "postgres"
+    password: "admin_dev"
+    jdbc:
+      template:
+        fetch-size: 50
+    jpa:
+      database-platform: "org.hibernate.dialect.PostgreSQLDialect"
+      hibernate:
+        ddl-auto: update
+        generate-ddl: true
+        show-sql: false
+      properties:
+        hibernate:
+          jdbc:
+            fetch-size: ${spring.jdbc.template.fetch-size}
+
+server:
+  error:
+    include-message: always
+
+keycloak:
+  auth-server-url: http://localhost:8081/auth
+  realm: Whiteboard
+  resource: whiteboard_tool
+  enable-basic-auth: true
+  credentials:
+    secret: e782ae2a-6ec5-4725-bc57-d9f513d41af5
+  cors: true
+
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-components: always
+      show-details: always
+    httptrace:
+      enabled: true
+    info:
+      enabled: true
+    loggers:
+      enabled: true
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - httptrace
+          - info
+          - loggers
+          - metrics
+          - prometheus
+          - openapi
+          - swaggerui
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+springdoc:
+  api-docs:
+    path: /whiteboard-docs

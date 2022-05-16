@@ -1,0 +1,29 @@
+@import "_variables.sass"
+
+@mixin center-items-column
+  display: flex
+  flex-direction: column
+  align-items: center
+
+body, html
+  margin: 0
+  height: 100vh
+  background-color: transparent
+  font-family: "Calibri", Helvetica, sans-serif
+  color: $primary-color-text
+
+@media(min-width: 768px)
+  body
+    background-color: $secondary-color
+
+.container
+  display: flex
+  justify-content: center
+  width: 100vw
+  height: 100vh
+
+p, a
+  font-size: 1vw
+
+h1, h2, h3, h4, h5, h6
+  margin: 0

@@ -1,0 +1,21 @@
+@import "src/styles/_variables.sass"
+
+\:host
+  height: 100%
+  width: 100%
+  display: grid
+  grid-template-areas: "header" "main"
+  grid-template-rows: auto 1fr
+  background-color: $primary-color
+
+.header
+  grid-area: header
+
+.main
+  grid-area: main
+
+@media(min-width: 768px)
+  \:host
+    background-color: transparent
+
+

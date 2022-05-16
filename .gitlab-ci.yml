@@ -1,0 +1,43 @@
+image: java:11-jdk
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
+stages:
+  - buildback
+  - testback
+  - buildfront
+
+before_script:
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+  - export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64
+
+cache:
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+
+buildfront:
+  stage: buildfront
+  before_script:
+    - npm ci
+  script:
+    - ng build
+
+
+buildback:
+  stage: buildback
+  script:
+    - cd ./backend/whiteboard/
+    - ./gradlew assemble
+
+
+testback:
+  stage: testback
+  script:
+    - cd ./backend/whiteboard/
+    - ./gradlew check
+
+
+after_script:
+  - echo "End CI"

@@ -1,0 +1,135 @@
+version: "3.9"
+services:
+  web-app:
+    container_name: web_dev
+    build:
+      context: frontend/whiteboard-app/
+      dockerfile: Dockerfile.dev
+    image: whiteboard-frontend-dev
+    ports:
+      - '4200:4200'
+    volumes:
+      - ./frontend/whiteboard-app:/app
+      - /app/node_modules
+  keycloak:
+    container_name: keycloak_dev
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      DB_VENDOR: ${KEYCLOAK_DB_VENDOR}
+      DB_ADDR: ${KEYCLOAK_DB_ADDR}
+      DB_DATABASE: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_SCHEMA: ${POSTGRES_SCHEMA}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KEYCLOAK_USER: ${KEYCLOAK_USER}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
+      KEYCLOAK_IMPORT: ${KEYCLOAK_IMPORT}
+    ports:
+      - "8081:8080"
+    volumes:
+    - ./keycloak-realm-imports/realm-export.json:${KEYCLOAK_IMPORT}
+    depends_on:
+      - postgres
+  sonarqube:
+    container_name: sonarqube_dev
+    image: sonarqube:9-community
+    depends_on:
+      - postgres
+    environment:
+      SONAR_JDBC_USERNAME: ${POSTGRES_USER}
+      SONAR_JDBC_PASSWORD: ${POSTGRES_PASSWORD}
+      SONAR_JDBC_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+    ports:
+      - "9000:9000"
+    volumes:
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+
+  postgres:
+    container_name: postgres_dev
+    image: postgres:13.4-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - whiteboard_dev:/var/lib/postgresql/data
+  flyway:
+    container_name: flyway_dev
+    image: flyway/flyway:7.15.0-alpine
+    environment:
+      FLYWAY_USER: ${POSTGRES_USER}
+      FLYWAY_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      FLYWAY_PASSWORD: ${POSTGRES_PASSWORD}
+      FLYWAY_SCHEMAS: ${POSTGRES_SCHEMA}
+      FLYWAY_BASELINE_ON_MIGRATE: 'true'
+    command:
+      -connectRetries=60 migrate
+    volumes:
+      - ./backend/whiteboard/whiteboard-app/src/main/resources/db/migration:/flyway/sql
+    depends_on:
+      - postgres
+  prometheus:
+    container_name: prometheus_dev
+    image: prom/prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+    ports:
+      - "9090:9090"
+    command: --config.file=/etc/prometheus/prometheus.yml
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - keycloak
+  grafana:
+      container_name: grafana_dev
+      image: grafana/grafana
+      depends_on:
+        - prometheus
+      ports:
+        - "3000:3000"
+      volumes:
+        - grafana_data:/var/lib/grafana
+  elastic-search:
+    image: elasticsearch:7.14.1
+    container_name: elasticsearch_dev
+    restart: on-failure
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      discovery.type: 'single-node'
+      ES_JAVA_OPTS: ${ES_JAVA}
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+  kibana:
+    image: kibana:7.14.1
+    container_name: kibana_dev
+    restart: on-failure
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_HOSTS: ${ES_HOSTS}
+  logstash:
+    image: logstash:7.14.1
+    container_name: logstash_dev
+    restart: on-failure
+    ports:
+      - "5000:5000"
+      - "5044:5044"
+      - "9600:9600"
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    environment:
+      XPACK_MONITORING_ELASTICSEARCH_HOSTS: ${ES_HOSTS}
+      XPACK_MONITORING_ENABLED: 'true'
+volumes:
+  grafana_data:
+  elasticsearch:
+  whiteboard_dev:
+  sonarqube_conf:
+  sonarqube_data:
+  sonarqube_extensions:

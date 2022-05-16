@@ -1,0 +1,62 @@
+subprojects {
+
+    def ignoreTestFailures = 'jenkins_ignoreTestFailures'
+    if (project.hasProperty(ignoreTestFailures) && Boolean.valueOf(property(ignoreTestFailures) as boolean)) {
+        test {
+            ignoreFailures true
+        }
+    }
+
+    jacocoTestReport {
+        getExecutionData().setFrom(fileTree(buildDir).include("/jacoco/*.exec"))
+        reports {
+            xml.enabled = true
+        }
+        afterEvaluate {
+            getClassDirectories().setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: ['**/config/', '**/gen/', '**/generated/'])
+            }))
+        }
+    }
+
+    jacocoTestReport.dependsOn(test)
+
+    sonarqube {
+        String regex = "(.*)/(.*)"
+        String projectKey = project.name.replaceAll(regex, "\$1:\$2")
+        String sonarModuleKey = "${rootProject.name}" + ':' + projectKey
+
+        properties {
+            property "sonar.moduleKey", sonarModuleKey
+            property "sonar.sources", "$projectDir/src/main"
+            property "sonar.exclusions", "**/config/, */config/**/, **/config/**,  */*Properties.java, **/*Application.java, **/*WebSecurityConfig.java"
+        }
+    }
+
+}
+
+task jacocoRootReport(type: JacocoReport) {
+    dependsOn = subprojects.test
+    sourceDirectories.from = subprojects.sourceSets.main.allSource.srcDirs
+    additionalSourceDirs.from = subprojects.sourceSets.main.allSource.srcDirs
+    classDirectories.from = subprojects.sourceSets.main.output
+    executionData.from = subprojects.jacocoTestReport.executionData
+    reports {
+        html.enabled = true
+        xml.enabled = true
+        csv.enabled = false
+    }
+    onlyIf = {
+        true
+    }
+    afterEvaluate {
+        getClassDirectories().setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['**/config/'])
+        }))
+    }
+}
+
+task quality(dependsOn: [
+        ":jacocoRootReport",
+        ":sonarqube"
+])

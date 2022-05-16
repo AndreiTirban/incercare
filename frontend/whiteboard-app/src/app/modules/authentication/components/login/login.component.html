@@ -1,0 +1,17 @@
+<app-card class="login">
+
+  <div class="login__left-content">
+    <h2 class="left-content__title">Collaborative</h2>
+    <h1 class="left-content__title-stroked">Whiteboard</h1>
+    <app-login-form></app-login-form>
+  </div>
+
+  <div class="login__right-content">
+    <app-image [altText]="'Board image'" [imageSource]="'assets/img/board.png'"
+               class="right-content__image"></app-image>
+    <p class="right-content__text">Don't have an account? Sign-up now!</p>
+    <app-button [buttonSize]="'btn-md'" [replaceUrl]="true" [routerLink]="['/signup']"
+                [text]="'Create account'"></app-button>
+  </div>
+
+</app-card>

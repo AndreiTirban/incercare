@@ -1,0 +1,57 @@
+<ng-container [formGroup]="formGroupParent">
+  <div class="form-field">
+
+    <label for="{{label}}">{{label}}</label>
+    <app-icon [iconName]=iconName class="form-field__icon"></app-icon>
+    <input
+      class="form-field__form-control"
+      formControlName="{{innerFormControlName}}"
+      id="{{label}}"
+      pattern="{{innerPattern}}"
+      placeholder="{{label}}"
+      type="{{type}}"
+    >
+
+  </div>
+
+  <div *ngIf="submitted && control.errors" class="form-field__invalid-feedback">
+
+    <div *ngIf="control.errors.required">
+      This field is required.
+    </div>
+
+    <div *ngIf="control.errors.pattern">
+      {{label}} is not valid.
+    </div>
+
+    <div *ngIf="control.errors.minlength">
+      {{label}} must be at least {{control.errors.minlength?.requiredLength}} characters long.
+    </div>
+
+    <div *ngIf="control.errors.maxlength">
+      {{label}} must not exceed {{control.errors.maxlength?.requiredLength}} characters.
+    </div>
+
+    <div *ngIf="control.errors.matching">
+      Passwords do not not match.
+    </div>
+
+    <div *ngIf="control.errors.uppercaseLetter">
+      {{label}} must contain an <strong>uppercase letter</strong>.
+    </div>
+
+    <div *ngIf="control.errors.lowercaseLetter">
+      {{label}} must contain a <strong>lowercase letter</strong>.
+    </div>
+
+    <div *ngIf="control.errors.digitValidation">
+      {{label}} must contain a <strong>digit</strong>.
+    </div>
+
+    <div *ngIf="control.errors.specialCharacter">
+      {{label}} must contain a <strong>special character</strong>.
+    </div>
+
+  </div>
+
+</ng-container>

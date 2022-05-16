@@ -1,0 +1,16 @@
+<app-card class="signup">
+
+  <div class="signup__left-content">
+    <h2 class="left-content__title">Collaborative</h2>
+    <h1 class="left-content__title-stroked">Whiteboard</h1>
+    <app-signup-form></app-signup-form>
+  </div>
+
+  <div class="signup__right-content">
+    <app-image [altText]="'Board image'" [imageSource]="'assets/img/board.png'"
+               class="right-content__image"></app-image>
+    <p class="right-content__text">Already a member? Login here.</p>
+    <app-button [buttonSize]="'btn-md'" [replaceUrl]="true" [routerLink]="['/login']" [text]="'Login'"></app-button>
+  </div>
+
+</app-card>
